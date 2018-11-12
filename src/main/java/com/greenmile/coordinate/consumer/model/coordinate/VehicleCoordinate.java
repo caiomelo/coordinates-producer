@@ -1,4 +1,4 @@
-package com.greenmile.coordinate.consumer.model.route;
+package com.greenmile.coordinate.consumer.model.coordinate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
