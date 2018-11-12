@@ -28,7 +28,7 @@ public class KafkaCoordinatesConsumerConfiguration {
     private String bootstrapAddresses;
 
     @Autowired
-    @Value("${kafka.config.groupid.coordinates.consumer}")
+    @Value("${kafka.config.groupid.coordinates.consumers}")
     private String groupId;
 
     @Bean
