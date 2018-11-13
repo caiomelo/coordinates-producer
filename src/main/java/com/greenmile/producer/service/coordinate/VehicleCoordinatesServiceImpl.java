@@ -19,9 +19,21 @@ public class VehicleCoordinatesServiceImpl implements VehicleCoordinatesService 
     @Autowired
     private KafkaTemplate<String, VehicleCoordinates> kafkaTemplate;
 
+    private ScheduledExecutorService executor;
+
+    public void setExecutor(ScheduledExecutorService executor) {
+        this.executor = executor;
+    }
+
+    public void setKafkaTemplate(KafkaTemplate<String, VehicleCoordinates> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+    
     @PostConstruct
-    public void init() {
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(10);
+    public final void init() {
+        if (executor == null) {
+            executor = Executors.newScheduledThreadPool(10);
+        }
         VehicleCoordinateProducer producer = new VehicleCoordinateProducer(kafkaTemplate);
         executor.scheduleWithFixedDelay(producer, 0, 5, TimeUnit.SECONDS);
     }

@@ -21,6 +21,10 @@ public class VehicleCoordinateProducer implements Runnable {
         this.kafkaTemplate = kafkaTemplate;
     }
 
+    public KafkaTemplate<String, VehicleCoordinates> getKafkaTemplate() {
+        return kafkaTemplate;
+    }
+
     @Override
     public void run() {
         VehicleCoordinates coordinate = new VehicleCoordinates();
