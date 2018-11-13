@@ -7,7 +7,7 @@ import java.util.Date;
  *
  * @author caioalbmelo
  */
-public class VehicleCoordinate {
+public class VehicleCoordinates {
 
     private double latitude;
 
