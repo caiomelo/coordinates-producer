@@ -32,12 +32,7 @@ public class VehicleCoordinatesProducer implements Runnable {
         coordinate.setLatitude(Math.random());
         coordinate.setLongitude(Math.random());
         coordinate.setVehicleId(UUID.randomUUID().toString());
-
-        try {
-            kafkaTemplate.send("coordinates", coordinate);
-        } catch (Exception ex) {
-            LOGGER.warn("error sending coordinate", ex);
-        }
+        kafkaTemplate.send("coordinates", coordinate);
     }
 
 }
