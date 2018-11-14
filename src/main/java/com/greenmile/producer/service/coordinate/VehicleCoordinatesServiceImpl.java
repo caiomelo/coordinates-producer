@@ -28,13 +28,18 @@ public class VehicleCoordinatesServiceImpl implements VehicleCoordinatesService 
     public void setKafkaTemplate(KafkaTemplate<String, VehicleCoordinates> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
-    
+
     @PostConstruct
     public final void init() {
         if (executor == null) {
-            executor = Executors.newScheduledThreadPool(10);
+            executor = buildExecutor();
+
         }
-        VehicleCoordinateProducer producer = new VehicleCoordinateProducer(kafkaTemplate);
+        VehicleCoordinatesProducer producer = new VehicleCoordinatesProducer(kafkaTemplate);
         executor.scheduleWithFixedDelay(producer, 0, 5, TimeUnit.SECONDS);
+    }
+
+    protected ScheduledExecutorService buildExecutor() {
+        return Executors.newScheduledThreadPool(10);
     }
 }

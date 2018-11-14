@@ -9,6 +9,7 @@ import org.mockito.ArgumentCaptor;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.mockito.MockitoAnnotations;
@@ -39,12 +40,36 @@ public class VehicleCoordinatesServiceImplTest {
     @Test
     public void testThatItSchedulesCoordinatesProducerTaskUsingGivenExecutorAndKafkaTemplate() {
         service.init();
-        
-        ArgumentCaptor<VehicleCoordinateProducer> producerCaptor = ArgumentCaptor.forClass(VehicleCoordinateProducer.class);
+
+        ArgumentCaptor<VehicleCoordinatesProducer> producerCaptor = ArgumentCaptor.forClass(VehicleCoordinatesProducer.class);
         verify(executorMock, times(1)).scheduleWithFixedDelay(
                 producerCaptor.capture(), anyLong(), anyLong(), eq(TimeUnit.SECONDS));
 
-        VehicleCoordinateProducer captured = producerCaptor.getValue();
+        VehicleCoordinatesProducer captured = producerCaptor.getValue();
+        assertEquals(templateMock, captured.getKafkaTemplate());
+    }
+
+    @Test
+    public void testThatItBuildsAnotherExecutorIfCurrentOneIsNull() {
+        ScheduledExecutorService newExecutor = mock(ScheduledExecutorService.class);
+
+        service = new VehicleCoordinatesServiceImpl() {
+            @Override
+            protected ScheduledExecutorService buildExecutor() {
+                return newExecutor;
+            }
+        };
+        
+        service.setKafkaTemplate(templateMock);
+        service.setExecutor(null);
+
+        service.init();
+
+        ArgumentCaptor<VehicleCoordinatesProducer> producerCaptor = ArgumentCaptor.forClass(VehicleCoordinatesProducer.class);
+        verify(newExecutor, times(1)).scheduleWithFixedDelay(
+                producerCaptor.capture(), anyLong(), anyLong(), eq(TimeUnit.SECONDS));
+
+        VehicleCoordinatesProducer captured = producerCaptor.getValue();
         assertEquals(templateMock, captured.getKafkaTemplate());
     }
 

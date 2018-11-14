@@ -11,13 +11,13 @@ import org.springframework.kafka.core.KafkaTemplate;
  *
  * @author caioalbmelo
  */
-public class VehicleCoordinateProducer implements Runnable {
+public class VehicleCoordinatesProducer implements Runnable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VehicleCoordinateProducer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VehicleCoordinatesProducer.class);
 
     private final KafkaTemplate<String, VehicleCoordinates> kafkaTemplate;
 
-    public VehicleCoordinateProducer(KafkaTemplate<String, VehicleCoordinates> kafkaTemplate) {
+    public VehicleCoordinatesProducer(KafkaTemplate<String, VehicleCoordinates> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
